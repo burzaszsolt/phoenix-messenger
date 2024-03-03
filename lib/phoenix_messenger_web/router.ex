@@ -8,6 +8,7 @@ defmodule PhoenixMessengerWeb.Router do
     plug :put_root_layout, html: {PhoenixMessengerWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug PhoenixMessengerWeb.Plugs.SetUser
   end
 
   pipeline :api do
@@ -18,6 +19,14 @@ defmodule PhoenixMessengerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+  end
+
+  scope "/auth", PhoenixMessengerWeb do
+    pipe_through(:browser)
+
+    get("/signout", AuthController, :signout)
+    get("/:provider", AuthController, :request)
+    get("/:provider/callback", AuthController, :callback)
   end
 
   # Other scopes may use custom stacks.
