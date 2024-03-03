@@ -1,2 +1,7 @@
 <.flash_group flash={@flash} />
-test
+<%= if @conn.assigns.user do %>
+  <h2>Welcome <%= @conn.assigns.user.name %></h2>
+<% else %>
+  <h2 class="text-2xl">Welcome to PhoenixMessenger!</h2>
+  <h3>Please log in to start messaging.</h3>
+<% end %>
