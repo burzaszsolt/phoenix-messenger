@@ -9,6 +9,15 @@ defmodule PhoenixMessenger.User do
     field(:token, :string)
     field(:profile_image, :string)
 
+    many_to_many :relationships,
+                 User,
+                 join_through: Relationship,
+                 join_keys: [user_id: :id, relation_id: :id]
+
+    many_to_many :reverse_relationships,
+                 User,
+                 join_through: Relationship,
+                 join_keys: [relation_id: :id, user_id: :id]
     timestamps()
   end
 
