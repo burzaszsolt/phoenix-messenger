@@ -6,15 +6,13 @@ defmodule PhoenixMessengerWeb.AuthController do
   alias PhoenixMessenger.Repo
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-
     user_params = %{
       token: auth.credentials.token,
-      email: auth.info.email,
-      name: auth.info.name,
+      url: auth.info.urls.html_url,
+      name: auth.info.name || auth.info.nickname,
       profile_image: auth.info.image,
       provider: "github"
     }
-
     changeset = User.changeset(%User{}, user_params)
 
     signin(conn, changeset)
@@ -42,7 +40,7 @@ defmodule PhoenixMessengerWeb.AuthController do
   end
 
   defp insert_or_update_user(changeset) do
-    case Repo.get_by(User, email: changeset.changes.email) do
+    case Repo.get_by(User, url: changeset.changes.url) do
       nil ->
         Repo.insert(changeset)
 

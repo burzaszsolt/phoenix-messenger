@@ -3,27 +3,28 @@ defmodule PhoenixMessenger.User do
   import Ecto.Changeset
 
   schema "users" do
-    field(:email, :string)
+    field(:url, :string)
     field(:name, :string)
     field(:provider, :string)
     field(:token, :string)
     field(:profile_image, :string)
 
     many_to_many :relationships,
-                 User,
+                 PhoenixMessenger.User,
                  join_through: Relationship,
                  join_keys: [user_id: :id, relation_id: :id]
 
     many_to_many :reverse_relationships,
-                 User,
+                 PhoenixMessenger.User,
                  join_through: Relationship,
                  join_keys: [relation_id: :id, user_id: :id]
+
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:email, :provider, :token, :name, :profile_image])
-    |> validate_required([:email, :provider, :token, :name, :profile_image])
+    |> cast(params, [:url, :provider, :token, :name, :profile_image])
+    |> validate_required([:url, :provider, :token, :name, :profile_image])
   end
 end
